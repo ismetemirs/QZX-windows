@@ -47,3 +47,8 @@ MIT License
 ---
 
 **Developed by İsmet Emir**
+
+---
+## Github Fix plz
+
+![ngrok setup](https://i.postimg.cc/FszW1vBz/Screenshot-20250502-184406-Windows-App.jpg)
