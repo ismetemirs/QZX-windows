@@ -1,0 +1,21 @@
+name: Pinggy
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Download Pinggy
+      run: Invoke-WebRequest https://github.com/pinggy-io/pinggy/releases/latest/download/pinggy_windows_amd64.exe -OutFile pinggy.exe
+
+    - name: Enable Terminal Services
+      run: |
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
+        Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
+        Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
+
+    - name: Start Pinggy Tunnel
+      run: .\pinggy.exe --tcp 3389 --region eu --print-connection
