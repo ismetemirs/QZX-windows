@@ -7,10 +7,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Download Pinggy
-      run: Invoke-WebRequest https://github.com/pinggy-io/pinggy/releases/latest/download/pinggy_windows_amd64.exe -OutFile pinggy.exe
-
-    - name: Enable Terminal Services
+    - name: Enable RDP
       run: |
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
@@ -18,4 +15,5 @@ jobs:
         Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
 
     - name: Start Pinggy Tunnel
-      run: .\pinggy.exe --tcp 3389 --region eu --print-connection
+      run: |
+        ssh -p 443 -R0:127.0.0.1:3389 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 GfB5N2qqm7G+tcp@free.pinggy.io
